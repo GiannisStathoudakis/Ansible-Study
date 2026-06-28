@@ -16,6 +16,7 @@
         update_cache: yes
       when: ansible_os_family == "RedHat"
 
+#Install package example
     - name: Install Apache web server && Apache
       tags: apache, php
       package:
@@ -23,8 +24,17 @@
         - "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
         - "{{ 'libapache2-mod-php' if ansible_os_family == 'Debian' else 'php' }}"
         state: latest
-    
-    - name: copy default htlm file for site
+
+#Service example
+    - name: start httpd (Centos)
+      tags: apache, redhat, httpd
+      service:
+        name: httpd
+        state: started
+      when: ansible_os_family == "RedHat"
+
+#Copy file example
+    - name: copy default htlm file for site #ansible-playbook --ask-become-pass install_apache.yml --tags copy_file
       tags: apache, copy_file
       copy:
         src: default_site.html
@@ -32,3 +42,21 @@
         owner: root 
         group: root 
         mode: 0644
+
+#Install from url example
+- hosts: workstations 
+  become: true
+  tasks:
+
+  - name: install unzip
+    package:
+      name: unzip
+
+  - name: install terraform
+    unarchive:
+      src: https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip
+      destination: /usr/local/bin
+      remote_src: yes
+      mode: 0755
+      owner: root
+      group: root
