@@ -1,2 +1,2 @@
 # Ansible-Study
-study
+This project is to learn Ansible based on the https://www.youtube.com/watch?v=3RiVKs8GHYQ&list=PLT98CRl2KxKEUHie1m24-wkyHpEsa4Y70&index=2
