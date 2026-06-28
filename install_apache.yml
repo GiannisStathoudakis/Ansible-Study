@@ -43,6 +43,25 @@
         owner: root 
         group: root 
         mode: 0644
+    
+#Manipulate text example
+    - name: change e-mail addressx for admin
+      tags: email 
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^ServerAdmin'
+        line: ServerAdmin somebody@somewhere.net
+      when: ansible_os_family == "RedHat"
+      register: httpd
+
+#Auto restart httpd when above file is changed
+    - name: restart httpd (Centos)
+      tags: apache,centos,httpd
+      service:
+        name: httpd
+        state: restarted 
+      when: httpd.changed
+      
 
 #Install from url example
 - hosts: workstations 
