@@ -23,3 +23,12 @@
         - "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
         - "{{ 'libapache2-mod-php' if ansible_os_family == 'Debian' else 'php' }}"
         state: latest
+    
+    - name: copy default htlm file for site
+      tags: apache, copy_file
+      copy:
+        src: default_site.html
+        dest: /var/www/html/index.html
+        owner: root 
+        group: root 
+        mode: 0644
