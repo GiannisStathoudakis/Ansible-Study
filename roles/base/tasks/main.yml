@@ -1,0 +1,29 @@
+- name: create user
+  tags: always
+  ansible.builtin.user:
+    name: rhenyra #The only true Quenn 
+    groups: root
+
+- name: add sudoers file for rhenyra
+  tags: always
+  ansible.builtin.copy:
+    src: sudoer_rhenyra
+    dest: /etc/sudoers.d/rhenyra
+    owner: root
+    group: root
+    mode: 0440
+
+- name: add ssh key for rhenyra user
+  tags: always
+  authorized_key:
+    user: rhenyra
+    key: "{{ lookup('file', '~/.ssh/ansible.pub') }}"
+
+- name: configure openssh based on template
+  ansible.builtin.template:
+    src: "{{ ssh_template_file }}"
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart_sshd
