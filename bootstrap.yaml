@@ -1,0 +1,39 @@
+---
+- hosts: web_servers
+  become: true
+  tasks:
+  #pre_tasks Do before tasks
+    - name: Update repository cache on Debian family OS
+      tags: always
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Update repository cache on Redhat family OS
+      tags: always
+      dnf:
+        update_cache: yes
+      when: ansible_os_family == "RedHat"
+
+#Create user
+    - name: create user
+      tags: name
+      user:
+        name: rhenyra #The only true Quenn 
+        groups: root
+#Add ssh public key
+    - name: add ssh key for rhenyra
+      tags: always
+      authorized_key:
+        user: rhenyra
+        key: "{{ lookup('file', '~/.ssh/ansible.pub') }}"
+#Set sudoers
+    - name: add sudoer file for rhenyra
+      tags: always
+      copy: 
+        src: sudoer_rhenyra
+        dest: /etc/sudoers.d/rhenyra
+        owner: root
+        group: root
+        mode: '0440'
+        validate: /usr/sbin/visudo -csf %s

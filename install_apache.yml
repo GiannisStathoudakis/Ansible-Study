@@ -4,18 +4,6 @@
   tasks:
   #pre_tasks Do before tasks
 
-    - name: Update repository index on Debian family OS
-      tags: always
-      apt:
-        update_cache: yes
-      when: ansible_os_family == "Debian"
-
-    - name: Update repository index on Redhat family OS
-      tags: always
-      dnf:
-        update_cache: yes
-      when: ansible_os_family == "RedHat"
-
 #Install package example
     - name: Install Apache web server && Apache
       tags: apache, php
