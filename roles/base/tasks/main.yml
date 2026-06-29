@@ -15,7 +15,7 @@
 
 - name: add ssh key for rhenyra user
   tags: always
-  authorized_key:
+  ansible.builtin.authorized_key:
     user: rhenyra
     key: "{{ lookup('file', '~/.ssh/ansible.pub') }}"
 
